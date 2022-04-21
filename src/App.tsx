@@ -13,12 +13,18 @@ import {
 } from './styled-components';
 
 const App = () => {
-	const [placeholder, setPlaceholder] = useState<boolean>(false)
 	let input1Ref: HTMLInputElement | null = null;
 	let input2Ref: HTMLInputElement | null = null;
 	let input3Ref: HTMLInputElement | null = null;
 	let input4Ref: HTMLInputElement | null = null;
 	let input5Ref: HTMLInputElement | null = null;
+
+	const [latestRecordId, setLatestRecordId] = useState<number>(0)
+	const [test1Data, setTest1Data] = useState<string>("")
+	const [test2Data, setTest2Data] = useState<string>("")
+	const [test3Data, setTest3Data] = useState<string>("")
+	const [test4Data, setTest4Data] = useState<string>("")
+	const [test5Data, setTest5Data] = useState<string>("")
 
 	useEffect(() => {
 		getLatestRecord();
@@ -26,12 +32,18 @@ const App = () => {
 
 	const getLatestRecord = async () => {
 		const latestRecord = await db.myRecords.orderBy('id').last()
-		console.log({latestRecord});
+		setLatestRecordId(latestRecord!.id!)
+		setTest1Data(latestRecord!.test1)
+		setTest2Data(latestRecord!.test2)
+		setTest3Data(latestRecord!.test3)
+		setTest4Data(latestRecord!.test4)
+		setTest5Data(latestRecord!.test5)
+
 	};
 
 	const buttonClicked = () => {
 		addTestDataToDB();
-		setPlaceholder(!placeholder)
+		getLatestRecord()
 	};
 
 	const addTestDataToDB = async () => {
@@ -102,24 +114,28 @@ const App = () => {
 			<OutputContainer>
 				<HeadingLabel>Database Output</HeadingLabel>
 				<LayerContainer>
+					<Label>Record Id</Label>
+					<OutputLabel>{latestRecordId}</OutputLabel>
+				</LayerContainer>
+				<LayerContainer>
 					<Label>Item 1</Label>
-					<OutputLabel>Test</OutputLabel>
+					<OutputLabel>{test1Data}</OutputLabel>
 				</LayerContainer>
 				<LayerContainer>
 					<Label> Item 2</Label>
-					<OutputLabel>Test</OutputLabel>
+					<OutputLabel>{test2Data}</OutputLabel>
 				</LayerContainer>
 				<LayerContainer>
 					<Label> Item 3</Label>
-					<OutputLabel>Test</OutputLabel>
+					<OutputLabel>{test3Data}</OutputLabel>
 				</LayerContainer>
 				<LayerContainer>
 					<Label> Item 4</Label>
-					<OutputLabel>Test</OutputLabel>
+					<OutputLabel>{test4Data}</OutputLabel>
 				</LayerContainer>
 				<LayerContainer>
 					<Label> Item 5</Label>
-					<OutputLabel>Test</OutputLabel>
+					<OutputLabel>{test5Data}</OutputLabel>
 				</LayerContainer>
 			</OutputContainer>
 		</AppContainer>
