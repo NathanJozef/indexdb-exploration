@@ -1,81 +1,52 @@
-import { useEffect } from 'react';
-import styled from 'styled-components';
-
-const AppContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	background-color: #123456;
-	height: 100vh;
-	width: 100vw;
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans',
-		'Droid Sans', 'Helvetica Neue', sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
-`;
-
-const InputContainer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: center;
-	background-color: #2976c3;
-	min-height: 20em;
-	width: 75%;
-	margin: 2em;
-`;
-
-const OutputContianer = styled.div`
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	align-items: center;
-	background-color: #32a07d;
-	min-height: 20em;
-	width: 75%;
-	margin: 2em;
-`;
-
-const HeadingLabel = styled.label`
-	font-size: xx-large;
-`;
-
-const LayerContainer = styled.div`
-	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-	align-content: center;
-	align-items: center;
-	width: 90%;
-	min-height: 2em;
-`;
-
-const Label = styled.label`
-	font-size: larger;
-	padding: 5px;
-`;
-
-const TextInput = styled.input`
-	width: 40%;
-`;
-
-const OutputLabel = styled.label`
-	font-size: larger;
-	padding: 5px;
-`;
-
-const SubmitButton = styled.button``;
+import { useEffect, useState } from 'react';
+import { db } from './db';
+import {
+	AppContainer,
+	InputContainer,
+	Label,
+	TextInput,
+	LayerContainer,
+	SubmitButton,
+	OutputLabel,
+	HeadingLabel,
+	OutputContainer,
+} from './styled-components';
 
 const App = () => {
+	const [placeholder, setPlaceholder] = useState<boolean>(false)
 	let input1Ref: HTMLInputElement | null = null;
 	let input2Ref: HTMLInputElement | null = null;
 	let input3Ref: HTMLInputElement | null = null;
 	let input4Ref: HTMLInputElement | null = null;
 	let input5Ref: HTMLInputElement | null = null;
 
-	useEffect(() => {});
+	useEffect(() => {
+		getLatestRecord();
+	});
+
+	const getLatestRecord = async () => {
+		const latestRecord = await db.myRecords.orderBy('id').last()
+		console.log({latestRecord});
+	};
+
+	const buttonClicked = () => {
+		addTestDataToDB();
+		setPlaceholder(!placeholder)
+	};
+
+	const addTestDataToDB = async () => {
+		try {
+			const id = await db.myRecords.put({
+				test1: input1Ref!.value,
+				test2: input2Ref!.value,
+				test3: input3Ref!.value,
+				test4: input4Ref!.value,
+				test5: input5Ref!.value,
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	};
 
 	return (
 		<AppContainer>
@@ -84,6 +55,7 @@ const App = () => {
 				<LayerContainer>
 					<Label>Item 1</Label>
 					<TextInput
+						defaultValue={'test1'}
 						ref={(ref) => {
 							input1Ref = ref;
 						}}
@@ -92,6 +64,7 @@ const App = () => {
 				<LayerContainer>
 					<Label> Item 2</Label>
 					<TextInput
+						defaultValue={'test2'}
 						ref={(ref) => {
 							input2Ref = ref;
 						}}
@@ -100,6 +73,7 @@ const App = () => {
 				<LayerContainer>
 					<Label> Item 3</Label>
 					<TextInput
+						defaultValue={'test3'}
 						ref={(ref) => {
 							input3Ref = ref;
 						}}
@@ -108,6 +82,7 @@ const App = () => {
 				<LayerContainer>
 					<Label> Item 4</Label>
 					<TextInput
+						defaultValue={'test4'}
 						ref={(ref) => {
 							input4Ref = ref;
 						}}
@@ -116,14 +91,15 @@ const App = () => {
 				<LayerContainer>
 					<Label> Item 5</Label>
 					<TextInput
+						defaultValue={'test5'}
 						ref={(ref) => {
 							input5Ref = ref;
 						}}
 					></TextInput>
 				</LayerContainer>
-				<SubmitButton onClick={() => {}}>Submit</SubmitButton>
+				<SubmitButton onClick={() => buttonClicked()}>Submit</SubmitButton>
 			</InputContainer>
-			<OutputContianer>
+			<OutputContainer>
 				<HeadingLabel>Database Output</HeadingLabel>
 				<LayerContainer>
 					<Label>Item 1</Label>
@@ -145,7 +121,7 @@ const App = () => {
 					<Label> Item 5</Label>
 					<OutputLabel>Test</OutputLabel>
 				</LayerContainer>
-			</OutputContianer>
+			</OutputContainer>
 		</AppContainer>
 	);
 };
