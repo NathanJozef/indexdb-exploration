@@ -61,12 +61,25 @@ I cannot hand on heart and profess to know about all the ins and outs of the tec
 
 * What are some of the pitfalls or gotchas we should avoid whilst working with IndexedDB?
 
+IndexDB instances are only available between applications that come from the same origin.
+
+"IndexedDB uses the same-origin principle, which means that it ties the store to the origin of the site that creates it (typically, this is the site domain or subdomain), so it cannot be accessed by any other origin.
+
+Third party window content (e.g. ``<iframe>`` content) cannot access IndexedDB if the browser is set to never accept third party cookies (see bug 1147821.)" [[IndexDB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB)]
 #### Question 4
 
 * During your work did you come across (either documented or just from your experience working with it) any security, supportability or stability issues we should be aware of before we think about adopting IndexedDB
+
+* IndexDB is very well supported as a core web technology. [MDN Index DB Browser Compatibility Matrix](https://docs.w3cub.com/browser_support_tables/indexeddb)
+* The IndexDB JS wrapper, Dexie, seems well supported. [Dexie IndexDB Browser Compatibility Matrix](https://dexie.org/docs/Dexie.js.html)
 
 #### Question 5
 
 * can a built Angular app use indexedDB (optional)?
 
 Yes; it is a browser based technology and not limited to any single framework. Bonus - Dexie provides resources for an angular implementation too.
+
+### References
+
+* [Dexie](https://dexie.org/)
+* [MDN Index DB](https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB)
